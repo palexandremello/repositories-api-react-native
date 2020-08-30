@@ -14,13 +14,24 @@ import {
 
 
 export default function App() {
+  const [repositories, setRepositories] = useState([]);
+
+  useEffect(() => {
+    api.get('repositories').then(response => {
+      console.log(response);
+      setRepositories(response.data);
+    })
+  },
+  []);
+
+
   async function handleLikeRepository(id) {
 
-    console.log(id);
     const response = await api.post(`/repositories/${id}/like`)
 
+    console.log(response);
     const likedRepository = response.data;
-    
+  
     const repositoriesUpdated = repositories.map(repository => {
       
       if (repository.id == id) {
@@ -39,18 +50,8 @@ export default function App() {
 
   }
 
-  const [repositories, setRepositories] = useState([]);
 
-
-  useEffect(() => {
-    api.get('repositories').then(response => {
-      console.log(response);
-      setRepositories(response.data);
-    })
-  },
-  []);
-
-
+  
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="#7159c1" />
@@ -74,7 +75,7 @@ export default function App() {
                style={styles.likeText}
                testID={`repository-likes-${repository.id}`}
              >
-               {repository.likes}
+               {repository.likes} curtidas
             </Text>
 
            </View>
